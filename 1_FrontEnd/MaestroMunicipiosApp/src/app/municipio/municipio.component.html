@@ -1,0 +1,133 @@
+<h1>Municipio</h1>
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="inputDepartamento">Departamento</label>
+        <select id="inputDepartamento" class="form-control" [(ngModel)]="municipios.DepartamentoId">
+      <option selected>Seleccione</option>
+      <option
+        *ngFor="let departamento of ltsdepartamentos"
+        [value]="departamento.DepartamentoId"
+      >
+        {{ departamento.Nombre }}
+      </option>
+    </select>
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="inputNombre">Nombre Municipio</label>
+        <input type="text" class="form-control" id="inputNombre" [(ngModel)]="municipios.Nombre" />
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="inputNombre">Código Municipio</label>
+        <input type="text" class="form-control" id="inputCodigo" [(ngModel)]="municipios.Codigo" />
+    </div>
+
+    <div class="form-group col-md-1 ">
+        <button type="button " (click)="onClickInsertMunicipio()" class="btn btn-primary ">
+      Guardar
+    </button>
+    </div>
+</div>
+
+<table class="table ">
+    <thead>
+        <tr>
+            <th scope="col ">DEPARTAMENTO</th>
+            <th scope="col ">NOMBRE</th>
+            <th scope="col ">CODIGO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let municipio of ltsmunicipios; index as i">
+            <td>{{ municipio.NombreDepto }}</td>
+            <td>{{ municipio.Nombre }}</td>
+            <td>{{ municipio.Codigo }}</td>
+            <button type="button " (click)="onClickDeteleMunicipio(municipio.MunicipioId)" class="btn btn-danger ">
+                Eliminar
+              </button>
+            <button class="btn btn-primary" style="margin-left: 5px; " (click)="onClickEditarMunicipio(content, municipio)">
+                Editar
+              </button>
+        </tr>
+    </tbody>
+</table>
+
+<br />
+
+<div class="row">
+    <div class="form-group col-md-3">
+        <label for="inputCod">Código municipio a buscar</label>
+        <input type="text" class="form-control" id="inputCod" [(ngModel)]="codFilter" />
+    </div>
+    <div class="col-md-3">
+        <button type="button " (click)="onClickSearch()" class="btn btn-primary ">
+      Buscar
+    </button>
+    </div>
+    <div class="col-md-6">
+        <h4>Departamento: {{tempFilter.NombreDepto}} Municipio: {{tempFilter.Nombre}}</h4>
+    </div>
+</div>
+
+<p *ngIf="NotificationStatus">
+    <ngb-alert [type]="TypeNotification" (close)="closeAlert()">{{ TextNotification }}
+    </ngb-alert>
+</p>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Municipio</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="form-group col-md-1">
+                <label for="inputId">Id </label>
+                <input type="number" class="form-control" id="inputId" [(ngModel)]="tempmunicipios.MunicipioId" />
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="inputDepartamento">Departamento</label>
+                <select id="inputDepartamento" class="form-control" [(ngModel)]="tempmunicipios.DepartamentoId">
+          <option selected>Seleccione</option>
+          <option
+            *ngFor="let departamentos of ltstempdepartamentos"
+            [value]="departamentos.DepartamentoId"
+          >
+            {{ departamentos.Nombre }}
+          </option>
+        </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="inputNombre">Nombre Municipio</label>
+                <input type="text" class="form-control" id="inputNombre" [(ngModel)]="tempmunicipios.Nombre" />
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="inputNombre">Código Municipio</label>
+                <input type="text" class="form-control" id="inputNombre" [(ngModel)]="tempmunicipios.Codigo" />
+            </div>
+
+            <div class="col-md-1" style="display: flex; flex-direction: column; text-align: center; align-items: center; justify-items: center;">
+                <button type="button " (click)="onClickUpdateMunicipio()" class="btn btn-primary ">
+          Guardar
+        </button>
+            </div>
+        </div>
+
+        <p *ngIf="ModalNotificationStatus">
+            <ngb-alert [type]="ModalTypeNotification" (close)="closeAlertModal()">{{ ModalTextNotification }}
+            </ngb-alert>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+      Cerrar
+    </button>
+    </div>
+</ng-template>

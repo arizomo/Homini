@@ -1,0 +1,85 @@
+<h1>Departamento</h1>
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="inputNombre">Nombre Departamento</label>
+        <input type="text" class="form-control" id="inputNombre" [(ngModel)]="departamentos.Nombre" />
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="inputNombre">Código</label>
+        <input type="text" class="form-control" id="inputCodigo" [(ngModel)]="departamentos.Codigo" />
+    </div>
+
+    <div class="form-group col-md-1 ">
+        <button type="button " (click)="onClickInsertDepartamento()" class="btn btn-primary ">
+      Guardar
+    </button>
+    </div>
+</div>
+
+<table class="table ">
+    <thead>
+        <tr>
+            <th scope="col ">Departamento Id</th>
+            <th scope="col ">Nombre</th>
+            <th scope="col ">Codigo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let departamento of ltsdepartamentos; index as i">
+            <td>{{ departamento.DepartamentoId }}</td>
+            <td>{{ departamento.Nombre }}</td>
+            <td>{{ departamento.Codigo }}</td>
+            <button type="button " (click)="onClickDeteleDepartamento(departamento.DepartamentoId)" class="btn btn-danger ">
+        Eliminar
+      </button>
+            <button class="btn btn-primary" style="margin-left: 5px; " (click)="onClickEditarDepartamento(content, departamento)">
+        Editar
+      </button>
+        </tr>
+    </tbody>
+</table>
+
+<p *ngIf="NotificationStatus">
+    <ngb-alert [type]="TypeNotification" (close)="closeAlert()">{{ TextNotification }}
+    </ngb-alert>
+</p>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Editar Departamento</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="inputNombre">Nombre Departamento</label>
+                <input type="text" class="form-control" id="inputNombre" [(ngModel)]="tempdepartamentos.Nombre" />
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="inputNombre">Codigo</label>
+                <input type="text" class="form-control" id="inputCodigo" [(ngModel)]="tempdepartamentos.Codigo" />
+            </div>
+
+            <div class="form-group col-md-1 ">
+                <button type="button " (click)="onClickUpdateDepartamento()" class="btn btn-primary ">
+          Guardar
+        </button>
+            </div>
+        </div>
+
+        <p *ngIf="ModalNotificationStatus">
+            <ngb-alert [type]="ModalTypeNotification" (close)="closeAlertModal()">{{ ModalTextNotification }}
+            </ngb-alert>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+      Cerrar
+    </button>
+    </div>
+</ng-template>
