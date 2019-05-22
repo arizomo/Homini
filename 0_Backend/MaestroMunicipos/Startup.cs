@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace MaestroMunicipos
 {
@@ -35,6 +36,23 @@ namespace MaestroMunicipos
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(
+                       Configuration["Data:POC"]
+                     ));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(
+                 options => options.UseSqlServer(
+                      Configuration["Data:POC"]
+                    ));
+            }
+
+            services.BuildServiceProvider().GetService<DbContext>().Database.Migrate();
 
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
