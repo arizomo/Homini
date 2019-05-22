@@ -1,4 +1,57 @@
-- task: Npm@1
+- task: AzureAppServiceManage@0
   inputs:
-    command: 'install'
-    workingDir: 'MaestroMunicipiosApp'
+    azureSubscription: 'MSDN Platforms(88b61a3d-c1e3-459b-8ef2-f85a9c975340)'
+    Action: 'Stop Azure App Service'
+    WebAppName: 'homini'
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: 'MaestroMunicipiosApp'
+        - task: Npm@1
+          inputs:
+            command: 'custom'
+            workingDir: 'MaestroMunicipiosApp'
+            customCommand: 'build-prod'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.107'
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: 
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'build'
+            projects: '**/*.csproj'
+            arguments: '--configuration release --no-restore'
+            feedsToUse: 'select'
+            versioningScheme: 'off'
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: 'publish'
+                publishWebProjects: true
+                arguments: '--configuration release --output $(build.artifactstagingdirectory)'
+                feedsToUse: 'select'
+                versioningScheme: 'off'
+                - task: PublishBuildArtifacts@1
+                  inputs:
+                    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                    ArtifactName: 'drop'
+                    publishLocation: 'Container'
+                    - task: AzureRmWebAppDeployment@4
+                      inputs:
+                        ConnectionType: 'AzureRM'
+                        appType: 'webApp'
+                        WebAppName: 
+                        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+                        - task: AzureAppServiceManage@0
+                          inputs:
+                            azureSubscription: 'MSDN Platforms(88b61a3d-c1e3-459b-8ef2-f85a9c975340)'
+                            Action: 'Start Azure App Service'
+                            WebAppName: 'homini'
